@@ -1,108 +1,49 @@
 $(function () {
-
-	toHtml();
-	toRich();
-	toDouban();
-
+    $(".something textarea").keyup(function(){  //keyup事件处理 
+    	convertToMarkdown();
+    }).bind("paste",function(){  //CTR+V事件处理 
+    	convertToMarkdown();
+    });
+    convertToMarkdown();  //转换默认文本
 })
 
 
-// markdown to html
-function toHtml () {
-	var plain = $(".something .plain_text");
-	$(".to_html").click(function () {
-		var markdown = $(".markdown .text").val();
-		plain.html(MarkdownToHtml(markdown));
-		typeSwitch("plain");
-	})
+// 将html转换为markdown，写入右边的框
+function convertToMarkdown () {
+	var source = $(".something textarea");
+	var target = $(".markdown textarea");
+	target.html(toMarkdown(clearRichHtml(source.val())));
+	$(".hidden").html("");
 }
 
-// markdown to rich text
-function toRich () {
-	var rich = $(".something .rich_text");
-	$(".to_rich").click(function () {
-		var markdown = $(".markdown .text").val();
-		rich.html(MarkdownToHtml(markdown));
-		typeSwitch("rich");
-	})
-}
-
-// markdown to douban
-function toDouban () {
-	var rich = $(".something .rich_text");
-	$(".to_douban").click(function () {
-		var markdown = $(".markdown .text").val();
-		rich.html(MarkdownToHtml(markdown));
-		rich.find("h2").each(function () {
-			$(this).replaceWith("<p>【" + $(this).html() + "】</p>");
-		})
-		rich.find("h3").each(function () {
-			$(this).replaceWith("<p>[" + $(this).html() + "]</p>");
-		})
-		rich.find("a").each(function () {
-			$(this).replaceWith($(this).html());
-		})
-		rich.find("img").each(function (index) {
-			$(this).replaceWith("<p><图片" + parseInt(index+1) + "></p>");
-		});
-		rich.find("b").each(function () {
-			$(this).replaceWith($(this).html());
-		})
-		rich.find("strong").each(function () {
-			$(this).replaceWith($(this).html());
-		})
-		rich.find("i").each(function () {
-			$(this).replaceWith($(this).html());
-		})
-		rich.find("em").each(function () {
-			$(this).replaceWith($(this).html());
-		})
-		rich.find("hr").each(function () {
+// 清除富文本中的特殊html标签
+function clearRichHtml (node) {
+	var hidden = $(".hidden");
+	hidden.html(node);
+	hidden.find("a").each(function () {  //清除锚链接
+		if(!$(this).attr("href")){
 			$(this).remove();
-		})
-		rich.find("blockquote").each(function () {
-			$(this).replaceWith($(this).html());
-		})
-		rich.find("ol").each(function () {
-			var content = "";
-			$(this).find("li").each(function (index) {
-				content = content + parseInt(index+1) + ". " + $(this).html() + "<br>";
-			})
-			$(this).replaceWith("<p>" + content + "</p>");
-		})
-		rich.find("ul").each(function () {
-			var content = "";
-			$(this).find("li").each(function () {
-				content = content + "· " + $(this).html() + "<br>";
-			})
-			$(this).replaceWith("<p>" + content + "</p>");
-		})
-		typeSwitch("rich");
+		}
 	})
-}
+	hidden.find("hr").each(function () {  //清除分隔线
+		$(this).remove();
+	})
+	hidden.find("figcaption").each(function () {  //清除figcaption
+		$(this).replaceWith("<p>" + $(this).html() + "</p>");
+	})
+	clearNestedTag("header,footer,hgroup,figure,span,div,section,article,details");  //清除可嵌套的标签
+	hidden.html(hidden.html().replace(/<!--[\w\W\r\n]*?-->/gmi, ''));  //清除注释
+	return hidden.html();
 
-
-// switch between plain text and rich text
-function typeSwitch (type) {
-	switch(type){
-		case "plain":
-			$(".something .text").hide();
-			$(".something .plain_text").show();
-			break;
-		case "rich":
-			$(".something .text").hide();
-			$(".something .rich_text").show();
-			break;
-		default:
-			break;
+	// 清除可嵌套的标签，保留标签内容，标签名为字符串，用“,”分隔
+	function clearNestedTag (tagName) {
+		var tagList = tagName.split(",");  //将标签列表分成数组
+		for (var i = 0; i < tagList.length; i++) {  //依次处理每个标签
+			while(hidden.find(tagList[i]).length > 0){  //反复循环直到清除所有相同标签
+				hidden.find(tagList[i]).each(function () {
+					$(this).replaceWith($(this).html());  //清除标签，保留内容
+				})
+			}
+		};
 	}
 }
-
-
-// convert markdown to html
-function MarkdownToHtml (markdown) {
-	var converter = new Showdown.converter();
-	return converter.makeHtml(markdown);
-}
-
-

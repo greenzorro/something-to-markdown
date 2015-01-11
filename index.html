@@ -3,66 +3,60 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<title>markdown to html</title>
+<title>html to markdown</title>
 <link href="http://greenzorro.github.io/colacdn/assets/css/reset.css" rel="stylesheet" type="text/css" />
 <link href="assets/style.css" rel="stylesheet" type="text/css" />
 <script src="http://greenzorro.github.io/colacdn/assets/js/jquery-latest.js"></script>
-<script src="assets/showdown.js"></script>
+<script src="assets/to-markdown.js"></script>
+<script src="assets/he.js"></script>
 <script src="assets/functions.js"></script>
 </head>
 
 <body>
-<h1 class="title">markdown格式转换</h1>
+<h1 class="title">富文本转换为markdown</h1>
 
 <div class="container clearfix">
 
-    <div class="markdown">
-        <h2>markdown</h2>
-        <textarea class="plain_text text" value="">
-## Some HTML
-
-Hello world! This demonstrates [to-markdown](https://github.com/domchristie/to-markdown) – an HTML to Markdown converter.
-
-* * *
-
-![](http://greenzorro.github.io/colacdn/assets/images/mask.png)
-
-1.  Number one
-2.  Number two
-3.  Number three
-
-### Sub Title
-
-![](http://greenzorro.github.io/colacdn/assets/images/photo.jpg)
-
-* item
-* item 2
-* item 3
-
-> Hello world! This demonstrates [to-markdown](https://github.com/domchristie/to-markdown) – an HTML to Markdown converter.</textarea>
-    </div>
-
-    <div class="buttons">
-        <a class="current to_html" href="javascript:;">转换为html</a>
-        <a class="to_rich" href="javascript:;">转换为富文本</a>
-        <a class="to_douban" href="javascript:;">转换为豆瓣日记</a>
-    </div>
-
     <div class="something">
         <h2>something</h2>
-        <textarea class="plain_text text" disabled></textarea>
-        <div class="rich_text text"></div>
+        <textarea>
+<h2>Some HTML</h2>
+<p>Hello world! This demonstrates <a href="https://github.com/domchristie/to-markdown">to-markdown</a> – an HTML to Markdown converter.</p>
+<hr />
+<p><img src="http://greenzorro.github.io/colacdn/assets/images/mask.png" alt="" title="" /></p>
+<ol>
+    <li>Number one</li>
+    <li>Number two</li>
+    <li>Number three</li>
+</ol>
+<h3>Sub Title</h3>
+<p><img src="http://greenzorro.github.io/colacdn/assets/images/photo.jpg" alt="" title="" /></p>
+<ul>
+    <li>item</li>
+    <li>item 2</li>
+    <li>item 3</li>
+</ul>
+<blockquote>
+    <p>Hello world! This demonstrates <a href="https://github.com/domchristie/to-markdown">to-markdown</a> – an HTML to Markdown converter.</p>
+</blockquote>
+        </textarea>
+    </div>
+
+    <div class="markdown">
+        <h2>markdown</h2>
+        <textarea disabled></textarea>
     </div>
 
 </div>
 
+<!-- 用于处理富文本的特殊标签 -->
+<div class="hidden"></div>
+
 <div class="info">
-    <h2>豆瓣日记格式是怎么回事？</h2>
-    <p>由于豆瓣的编辑器太简陋，不支持粘贴图片，不支持链接，不支持h1~h6，不支持粗体斜体，所以做了一个格式美化功能。</p>
-    <p>转换过程会把h2标题两边加上“【】”，h3标题两边加上“[]”，ol加上序号，ul加上“·”。还有最重要的一点，图片全部转换成“<图片n>”。</p>
-    <p>用markdown写好的文章，如果要去豆瓣发布时，首先要把图片按文中顺序在豆瓣编辑器中上传一遍，删除上传产生的<图片n>，再将转换后的内容粘贴进编辑器就可以了。</p>
+    <h2>有什么特点？</h2>
+    <p>html转markdown的工具遍天下，本工具的特点在于能较好地处理富文本。很多网站（比如Medium）对内容的渲染采用了比较复杂的逻辑，产生很多诸如figcaption、section、article这样的HTML5标签，这是markdown所不支持的。本工具会清除这些特殊标签，或转换成markdown支持的标签。</p>
     <h2>关于技术实现</h2>
-    <p>感谢<a href="https://github.com/showdownjs/showdown" target="_blank">showdown.js项目</a>，本工具中 markdown 转 html 的核心功能来自showdown.js</p>
+    <p>感谢<a href="https://github.com/domchristie/to-markdown" target="_blank">to-markdown项目</a>，本工具中 html 转 markdown 的核心功能来自to-markdown</p>
 </div>
 
 <p class="copyright">designed and coded by <a href="http://colachan.com/" target="blank">可乐橙</a></p>
