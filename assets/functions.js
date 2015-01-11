@@ -20,15 +20,21 @@ function convertToMarkdown () {
 function clearRichHtml (node) {
 	var hidden = $(".hidden");
 	hidden.html(node);
+	hidden.find("div").each(function () {  //读取写在背景中的图片，转换成img标签
+		if ($(this).css("background-image") != "none" && $(this).css("background-image").length > 0) {
+			var imgUrl = $(this).css("background-image").split("url(")[1].split(")")[0];
+			$(this).prepend("<p><img src='" + imgUrl + "' /></p>");
+		};
+	})
 	hidden.find("a").each(function () {  //清除锚链接
-		if(!$(this).attr("href")){
+		if(!$(this).attr("href")){  //如果不带链接地址就删除该a标签
 			$(this).remove();
 		}
 	})
-	hidden.find("hr").each(function () {  //清除分隔线
-		$(this).remove();
-	})
-	hidden.find("figcaption").each(function () {  //清除figcaption
+	hidden.find("hr").remove();  //清除分隔线
+	hidden.find("br").replaceWith(" ");  //换行符转换为空格
+	hidden.find("figure img").wrap("<p></p>");  //figure内的图片，包裹p标签
+	hidden.find("figcaption").each(function () {  //figcaption转换为p标签
 		$(this).replaceWith("<p>" + $(this).html() + "</p>");
 	})
 	clearNestedTag("header,footer,hgroup,figure,span,div,section,article,details");  //清除可嵌套的标签
