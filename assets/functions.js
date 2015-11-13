@@ -43,8 +43,6 @@ function clearRichHtml (node) {
 
 	// 清除medium文章中的缩略图
 	hidden.find("img").each(function () {
-		console.log($(this));
-		console.log($(this).attr("src"));
 		if ($(this).attr("src") && $(this).attr("src").indexOf("medium") > 0 && $(this).attr("src").indexOf("freeze") > 0) {
 			$(this).remove();
 		}
