@@ -40,7 +40,15 @@ function clearRichHtml (node) {
 	hidden.find("figcaption").each(function () {  //figcaption转换为p标签
 		$(this).replaceWith("<p>" + $(this).html() + "</p>");
 	})
-	clearNestedTag("header,footer,hgroup,figure,span,div,section,article,details");  //清除可嵌套的标签
+
+	// 清除medium文章中的缩略图
+	hidden.find("img").each(function () {
+		if ($(this).attr("src").indexOf("medium") > 0 && $(this).attr("src").indexOf("freeze") > 0) {
+			$(this).remove();
+		}
+	})
+
+	clearNestedTag("header,footer,hgroup,figure,span,div,section,article,details,main");  //清除可嵌套的标签
 	hidden.html(hidden.html().replace(/<!--[\w\W\r\n]*?-->/gmi, ''));  //清除注释
 	return hidden.html();
 
