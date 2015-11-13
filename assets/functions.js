@@ -32,6 +32,9 @@ function clearRichHtml (node) {
 		}
 	})
 	hidden.find("hr").remove();  //清除分隔线
+	hidden.find("canvas").remove();  //清除canvas
+	hidden.find("noscript").remove();  //清除noscript
+	hidden.find("hr").remove();  //清除分隔线
 	hidden.find("br").replaceWith(" ");  //换行符转换为空格
 	hidden.find("figure img").wrap("<p></p>");  //figure内的图片，包裹p标签
 	hidden.find("figcaption").each(function () {  //figcaption转换为p标签
