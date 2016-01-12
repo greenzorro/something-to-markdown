@@ -27,7 +27,7 @@ function clearRichHtml (node) {
 		};
 	})
 	hidden.find("a").each(function () {  //清除锚链接
-		if(!$(this).attr("href")){  //如果不带链接地址就删除该a标签
+		if(!$(this).attr("href") || $(this).attr("href")[0] == "#"){  //如果不带链接地址、或者只有锚链接，就删除该a标签
 			$(this).remove();
 		}
 	})
@@ -39,6 +39,12 @@ function clearRichHtml (node) {
 	hidden.find("figure img").wrap("<p></p>");  //figure内的图片，包裹p标签
 	hidden.find("figcaption").each(function () {  //figcaption转换为p标签
 		$(this).replaceWith("<p>" + $(this).html() + "</p>");
+	})
+	hidden.find("sup").each(function () {  //sup转换为em标签
+		$(this).replaceWith("<em>" + $(this).html() + "</em>");
+	})
+	hidden.find("sub").each(function () {  //sub转换为em标签
+		$(this).replaceWith("<em>" + $(this).html() + "</em>");
 	})
 
 	// 清除medium文章中的缩略图
