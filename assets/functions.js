@@ -46,6 +46,12 @@ function clearRichHtml (node) {
 	hidden.find("sub").each(function () {  //sub转换为em标签
 		$(this).replaceWith("<em>" + $(this).html() + "</em>");
 	})
+	hidden.find("small").each(function () {  //small转换为em标签
+		$(this).replaceWith("<em>" + $(this).html() + "</em>");
+	})
+	hidden.find("q").each(function () {  //q转换为em标签
+		$(this).replaceWith("<em>" + $(this).html() + "</em>");
+	})
 
 	// 清除medium文章中的缩略图
 	hidden.find("img").each(function () {
