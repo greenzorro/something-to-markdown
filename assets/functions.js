@@ -37,8 +37,8 @@ function clearRichHtml (node) {
 	hidden.find("hr").remove();  //清除分隔线
 	hidden.find("br").replaceWith(" ");  //换行符转换为空格
 	hidden.find("figure img").wrap("<p></p>");  //figure内的图片，包裹p标签
-	hidden.find("figcaption").each(function () {  //figcaption转换为p标签
-		$(this).replaceWith("<p>" + $(this).html() + "</p>");
+	hidden.find("figcaption").each(function () {  //figcaption转换为em标签
+		$(this).replaceWith("<em>" + $(this).html() + "</em>");
 	})
 	hidden.find("sup").each(function () {  //sup转换为em标签
 		$(this).replaceWith("<em>" + $(this).html() + "</em>");
@@ -49,8 +49,8 @@ function clearRichHtml (node) {
 	hidden.find("small").each(function () {  //small转换为em标签
 		$(this).replaceWith("<em>" + $(this).html() + "</em>");
 	})
-	hidden.find("q").each(function () {  //q转换为em标签
-		$(this).replaceWith("<em>" + $(this).html() + "</em>");
+	hidden.find("q").each(function () {  //q转换为blockquote标签
+		$(this).replaceWith("<blockquote>" + $(this).html() + "</blockquote>");
 	})
 
 	// 清除medium文章中的缩略图
