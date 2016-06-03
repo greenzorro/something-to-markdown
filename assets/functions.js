@@ -49,6 +49,9 @@ function clearRichHtml (node) {
 	hidden.find("small").each(function () {  //small转换为em标签
 		$(this).replaceWith("<em>" + $(this).html() + "</em>");
 	})
+	hidden.find("center").each(function () {  //center转换为em标签
+		$(this).replaceWith("<em>" + $(this).html() + "</em>");
+	})
 	hidden.find("q").each(function () {  //q转换为blockquote标签
 		$(this).replaceWith("<blockquote>" + $(this).html() + "</blockquote>");
 	})
