@@ -65,7 +65,7 @@ function clearRichHtml (node) {
 
 	// invision中的图片注解转换为em标签
 	hidden.find(".wp-caption-text").each(function () {
-		$(this).replaceWith("<em>" + $(this).html() + "</em>");
+		$(this).replaceWith("<p><em>" + $(this).html() + "</em></p>");
 	})
 
 	// invision中的Tweeter引用转换为blockquote
