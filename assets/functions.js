@@ -63,6 +63,16 @@ function clearRichHtml (node) {
 		}
 	})
 
+	// invision中的图片注解转换为em标签
+	hidden.find(".wp-caption-text").each(function () {
+		$(this).replaceWith("<em>" + $(this).html() + "</em>");
+	})
+
+	// invision中的Tweeter引用转换为blockquote
+	hidden.find(".inv-tweet-sa").each(function () {
+		$(this).wrap("<blockquote></blockquote>");
+	})
+
 	clearNestedTag("header,footer,hgroup,figure,span,div,section,article,details,main");  //清除可嵌套的标签
 	hidden.html(hidden.html().replace(/<!--[\w\W\r\n]*?-->/gmi, ''));  //清除注释
 	return hidden.html();
