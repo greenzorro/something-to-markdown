@@ -26,34 +26,24 @@ function clearRichHtml (node) {
 			$(this).prepend("<p><img src='" + imgUrl + "' /></p>");
 		};
 	})
+	hidden.html(hidden.html().replace(/\t/g,""));  //清除制表符
 	hidden.find("a").each(function () {  //清除锚链接
 		if(!$(this).attr("href") || $(this).attr("href")[0] == "#"){  //如果不带链接地址、或者只有锚链接，就删除该a标签
 			$(this).remove();
 		}
 	})
-	hidden.find("hr").remove();  //清除分隔线
-	hidden.find("canvas").remove();  //清除canvas
-	hidden.find("noscript").remove();  //清除noscript
-	hidden.find("hr").remove();  //清除分隔线
-	hidden.find("br").replaceWith(" ");  //换行符转换为空格
-	hidden.find("figure img").wrap("<p></p>");  //figure内的图片，包裹p标签
-	hidden.find("figcaption").each(function () {  //figcaption转换为em标签
-		$(this).replaceWith("<em>" + $(this).html() + "</em>");
-	})
-	hidden.find("sup").each(function () {  //sup转换为em标签
-		$(this).replaceWith("<em>" + $(this).html() + "</em>");
-	})
-	hidden.find("sub").each(function () {  //sub转换为em标签
-		$(this).replaceWith("<em>" + $(this).html() + "</em>");
-	})
-	hidden.find("small").each(function () {  //small转换为em标签
-		$(this).replaceWith("<em>" + $(this).html() + "</em>");
-	})
-	hidden.find("center").each(function () {  //center转换为em标签
-		$(this).replaceWith("<em>" + $(this).html() + "</em>");
-	})
-	hidden.find("q").each(function () {  //q转换为blockquote标签
-		$(this).replaceWith("<blockquote>" + $(this).html() + "</blockquote>");
+	removeTag("hr,canvas,noscript");  //清除标签
+	wrapTag("figure,figcaption","p");  //包裹p标签
+	transformTag("br"," ","");  //转换为空格
+	transformTag("sup,sub,small,center,figcaption","<em>","</em>");  //转换为em标签
+	transformTag("q","<blockquote>","</blockquote>");  //转换为blockquote标签
+	transformTag("cite","","");  //清除cite标签，保留内容
+
+	// 清除空的em标签
+	hidden.find("em").each(function () {
+		if ($(this).html() == "") {
+			$(this).remove();
+		}
 	})
 
 	// 清除medium文章中的缩略图
@@ -63,15 +53,9 @@ function clearRichHtml (node) {
 		}
 	})
 
-	// invision中的图片注解转换为em标签
-	hidden.find(".wp-caption-text").each(function () {
-		$(this).replaceWith("<p><em>" + $(this).html() + "</em></p>");
-	})
-
-	// invision中的Tweeter引用转换为blockquote
-	hidden.find(".inv-tweet-sa").each(function () {
-		$(this).wrap("<blockquote></blockquote>");
-	})
+	// invision
+	transformTag(".wp-caption-text","<p><em>","</em></p>");  //图片注解转换为em标签
+	wrapTag(".inv-tweet-sa","blockquote");  //Tweeter引用转换为blockquote
 
 	clearNestedTag("header,footer,hgroup,figure,span,div,section,article,details,main");  //清除可嵌套的标签
 	hidden.html(hidden.html().replace(/<!--[\w\W\r\n]*?-->/gmi, ''));  //清除注释
@@ -86,6 +70,32 @@ function clearRichHtml (node) {
 					$(this).replaceWith($(this).html());  //清除标签，保留内容
 				})
 			}
+		};
+	}
+
+	// 处理多种标签，提取其内容，用特定标签包裹
+	function transformTag(tagName, tagHead, tagTail) {
+		var tagList = tagName.split(",");  //将标签列表分成数组
+		for (var i = 0; i < tagList.length; i++) {  //依次处理每个标签
+			hidden.find(tagList[i]).each(function () {  //清除标签，保留内容，包裹新的标签
+				$(this).replaceWith([tagHead, $(this).html(), tagTail].join(""));
+			})
+		};
+	}
+
+	// 清除多种标签
+	function removeTag(tagName) {
+		var tagList = tagName.split(",");  //将标签列表分成数组
+		for (var i = 0; i < tagList.length; i++) {  //依次处理每个标签
+			hidden.find(tagList[i]).remove();
+		};
+	}
+
+	// 包裹多种标签
+	function wrapTag(tagName, wrap) {
+		var tagList = tagName.split(",");  //将标签列表分成数组
+		for (var i = 0; i < tagList.length; i++) {  //依次处理每个标签
+			hidden.find(tagList[i]).wrap(["<", wrap, "></", wrap, ">"].join(""));
 		};
 	}
 }
