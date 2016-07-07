@@ -34,16 +34,19 @@ function clearRichHtml (node) {
 	})
 	removeTag("hr,canvas,noscript");  //清除标签
 	wrapTag("figure,figcaption","p");  //包裹p标签
-	transformTag("br"," ","");  //转换为空格
-	transformTag("sup,sub,small,center,figcaption","<em>","</em>");  //转换为em标签
+	transformTag("br","<p> ","</p>");  //转换为p标签
 	transformTag("q","<blockquote>","</blockquote>");  //转换为blockquote标签
-	transformTag("cite","","");  //清除cite标签，保留内容
+	transformTag("center,figcaption","<p><em>","</em></p>");  //转换为em标签
 
 	// 清除空的em标签
 	hidden.find("em").each(function () {
 		if ($(this).html() == "") {
 			$(this).remove();
 		}
+	})
+	// 清除多余的嵌套em标签
+	hidden.find("em em").each(function () {
+		$(this).replaceWith($(this).html());
 	})
 
 	// 清除medium文章中的缩略图
@@ -57,7 +60,8 @@ function clearRichHtml (node) {
 	transformTag(".wp-caption-text","<p><em>","</em></p>");  //图片注解转换为em标签
 	wrapTag(".inv-tweet-sa","blockquote");  //Tweeter引用转换为blockquote
 
-	clearNestedTag("header,footer,hgroup,figure,span,div,section,article,details,main");  //清除可嵌套的标签
+	// 清除无用标签
+	clearNestedTag("header,footer,hgroup,figure,span,div,section,article,details,main,cite,sup,sub,small");
 	hidden.html(hidden.html().replace(/<!--[\w\W\r\n]*?-->/gmi, ''));  //清除注释
 	return hidden.html();
 
@@ -73,7 +77,7 @@ function clearRichHtml (node) {
 		};
 	}
 
-	// 处理多种标签，提取其内容，用特定标签包裹
+	// 处理多种标签，提取其内容，用特定标签包裹，用“,”分隔
 	function transformTag(tagName, tagHead, tagTail) {
 		var tagList = tagName.split(",");  //将标签列表分成数组
 		for (var i = 0; i < tagList.length; i++) {  //依次处理每个标签
@@ -83,7 +87,7 @@ function clearRichHtml (node) {
 		};
 	}
 
-	// 清除多种标签
+	// 清除多种标签，用“,”分隔
 	function removeTag(tagName) {
 		var tagList = tagName.split(",");  //将标签列表分成数组
 		for (var i = 0; i < tagList.length; i++) {  //依次处理每个标签
@@ -91,7 +95,7 @@ function clearRichHtml (node) {
 		};
 	}
 
-	// 包裹多种标签
+	// 包裹多种标签，用“,”分隔
 	function wrapTag(tagName, wrap) {
 		var tagList = tagName.split(",");  //将标签列表分成数组
 		for (var i = 0; i < tagList.length; i++) {  //依次处理每个标签
