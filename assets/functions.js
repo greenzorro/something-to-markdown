@@ -49,6 +49,15 @@ function clearRichHtml (node) {
 		$(this).replaceWith($(this).html());
 	})
 
+	// 如果有h1，所有标题降一级
+	if (hidden.find("h1").length > 0) {
+		for (var i = 5; i > 0; i--) {
+			hidden.find("h" + i).each(function () {
+				$(this).replaceWith(["<h",i+1,">",$(this).html(),"</",i+1,">"].join(""));
+			})
+		}
+	}
+
 	// 清除medium文章中的缩略图
 	hidden.find("img").each(function () {
 		if ($(this).attr("src") && $(this).attr("src").indexOf("medium") > 0 && $(this).attr("src").indexOf("freeze") > 0) {
